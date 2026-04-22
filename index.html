@@ -1,1 +1,658 @@
- 
+ <!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Morning Brief</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=IM+Fell+English:ital@0;1&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+–ink: #1a1008;
+–paper: #f5f0e8;
+–paper-dark: #ede7d5;
+–rule: #2a1f0e;
+–accent: #8b1a1a;
+–muted: #5a4a35;
+–col-gap: 20px;
+}
+
+body {
+background: #c8b89a;
+font-family: ‘Source Serif 4’, Georgia, serif;
+color: var(–ink);
+min-height: 100vh;
+padding: 20px;
+background-image:
+repeating-linear-gradient(
+90deg,
+transparent,
+transparent 200px,
+rgba(0,0,0,0.03) 200px,
+rgba(0,0,0,0.03) 201px
+);
+}
+
+.page {
+max-width: 1100px;
+margin: 0 auto;
+background: var(–paper);
+box-shadow: 0 4px 40px rgba(0,0,0,0.35), inset 0 0 80px rgba(180,160,120,0.15);
+position: relative;
+overflow: hidden;
+}
+
+/* Paper texture overlay */
+.page::before {
+content: ‘’;
+position: absolute;
+inset: 0;
+background-image: url(“data:image/svg+xml,%3Csvg xmlns=‘http://www.w3.org/2000/svg’ width=‘400’ height=‘400’%3E%3Cfilter id=‘noise’%3E%3CfeTurbulence type=‘fractalNoise’ baseFrequency=‘0.9’ numOctaves=‘4’ stitchTiles=‘stitch’/%3E%3CfeColorMatrix type=‘saturate’ values=‘0’/%3E%3C/filter%3E%3Crect width=‘400’ height=‘400’ filter=‘url(%23noise)’ opacity=‘0.04’/%3E%3C/svg%3E”);
+pointer-events: none;
+z-index: 10;
+opacity: 0.6;
+}
+
+/* ── MASTHEAD ── */
+.masthead {
+padding: 18px 28px 0;
+border-bottom: 3px double var(–rule);
+}
+
+.masthead-top {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding-bottom: 6px;
+border-bottom: 1px solid var(–rule);
+margin-bottom: 8px;
+font-size: 10px;
+letter-spacing: 0.12em;
+text-transform: uppercase;
+color: var(–muted);
+font-family: ‘Source Serif 4’, serif;
+font-weight: 300;
+}
+
+.masthead-meta span { margin: 0 8px; }
+.masthead-meta span:first-child { margin-left: 0; }
+
+.ai-badge {
+background: var(–accent);
+color: #f5f0e8;
+padding: 2px 8px;
+font-size: 9px;
+letter-spacing: 0.15em;
+font-weight: 600;
+}
+
+.paper-name {
+text-align: center;
+padding: 10px 0 12px;
+}
+
+.paper-name h1 {
+font-family: ‘Playfair Display’, Georgia, serif;
+font-size: clamp(48px, 8vw, 88px);
+font-weight: 900;
+line-height: 0.9;
+letter-spacing: -0.02em;
+color: var(–ink);
+}
+
+.paper-name .subtitle {
+font-family: ‘IM Fell English’, Georgia, serif;
+font-style: italic;
+font-size: 13px;
+color: var(–muted);
+margin-top: 6px;
+letter-spacing: 0.05em;
+}
+
+/* ── EDITION BAR ── */
+.edition-bar {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 5px 28px;
+background: var(–ink);
+color: var(–paper);
+font-size: 10px;
+letter-spacing: 0.12em;
+text-transform: uppercase;
+font-family: ‘Source Serif 4’, serif;
+font-weight: 300;
+}
+
+/* ── SECTION LABEL ── */
+.section-label {
+padding: 6px 28px;
+border-bottom: 2px solid var(–rule);
+display: flex;
+align-items: center;
+gap: 12px;
+}
+
+.section-label span {
+font-family: ‘Playfair Display’, serif;
+font-size: 11px;
+letter-spacing: 0.25em;
+text-transform: uppercase;
+font-weight: 700;
+color: var(–accent);
+}
+
+.section-label::after {
+content: ‘’;
+flex: 1;
+height: 1px;
+background: var(–rule);
+opacity: 0.3;
+}
+
+/* ── THREE-COLUMN LAYOUT ── */
+.columns {
+display: grid;
+grid-template-columns: 1fr 1fr 1fr;
+gap: 0;
+padding: 0 20px;
+position: relative;
+}
+
+.col {
+padding: 16px var(–col-gap);
+position: relative;
+}
+
+.col:not(:last-child)::after {
+content: ‘’;
+position: absolute;
+right: 0;
+top: 16px;
+bottom: 16px;
+width: 1px;
+background: var(–rule);
+opacity: 0.4;
+}
+
+/* ── ARTICLES ── */
+.article {
+margin-bottom: 20px;
+padding-bottom: 18px;
+border-bottom: 1px solid rgba(42,31,14,0.2);
+}
+
+.article:last-child {
+border-bottom: none;
+}
+
+.article-label {
+font-size: 9px;
+letter-spacing: 0.2em;
+text-transform: uppercase;
+color: var(–accent);
+font-weight: 700;
+margin-bottom: 4px;
+font-family: ‘Source Serif 4’, serif;
+}
+
+.article h2 {
+font-family: ‘Playfair Display’, Georgia, serif;
+font-size: 17px;
+font-weight: 700;
+line-height: 1.2;
+margin-bottom: 6px;
+color: var(–ink);
+}
+
+.article h2.large {
+font-size: 22px;
+}
+
+.article .deck {
+font-family: ‘IM Fell English’, Georgia, serif;
+font-style: italic;
+font-size: 12.5px;
+color: var(–muted);
+line-height: 1.4;
+margin-bottom: 7px;
+border-left: 2px solid var(–accent);
+padding-left: 8px;
+}
+
+.article p {
+font-size: 12.5px;
+line-height: 1.65;
+color: #2a1f0e;
+font-weight: 300;
+text-align: justify;
+hyphens: auto;
+}
+
+.article p + p {
+text-indent: 1em;
+margin-top: 0;
+}
+
+/* Source tag */
+.source-tag {
+display: inline-block;
+margin-top: 6px;
+font-size: 9px;
+letter-spacing: 0.1em;
+text-transform: uppercase;
+color: var(–muted);
+font-family: ‘Source Serif 4’, serif;
+opacity: 0.7;
+}
+
+/* ── FEATURED / LEAD STORY ── */
+.lead-story {
+grid-column: 1 / -1;
+padding: 16px 20px 0;
+margin-bottom: 0;
+border-bottom: 2px solid var(–rule);
+display: grid;
+grid-template-columns: 1.5fr 1fr;
+gap: 20px;
+align-items: start;
+}
+
+.lead-story .lead-headline {
+font-family: ‘Playfair Display’, Georgia, serif;
+font-size: clamp(26px, 4vw, 38px);
+font-weight: 900;
+line-height: 1.1;
+margin-bottom: 10px;
+color: var(–ink);
+}
+
+.lead-story .lead-subhead {
+font-family: ‘IM Fell English’, serif;
+font-style: italic;
+font-size: 14px;
+color: var(–muted);
+margin-bottom: 10px;
+line-height: 1.5;
+}
+
+.lead-story p {
+font-size: 13px;
+line-height: 1.68;
+color: #2a1f0e;
+font-weight: 300;
+text-align: justify;
+hyphens: auto;
+}
+
+.lead-aside {
+border-left: 1px solid rgba(42,31,14,0.3);
+padding-left: 20px;
+}
+
+.lead-aside .aside-label {
+font-size: 9px;
+letter-spacing: 0.2em;
+text-transform: uppercase;
+color: var(–accent);
+font-weight: 700;
+margin-bottom: 8px;
+font-family: ‘Source Serif 4’, serif;
+}
+
+.aside-item {
+padding: 8px 0;
+border-bottom: 1px solid rgba(42,31,14,0.15);
+}
+
+.aside-item:last-child { border-bottom: none; }
+
+.aside-item h3 {
+font-family: ‘Playfair Display’, serif;
+font-size: 13px;
+font-weight: 700;
+line-height: 1.25;
+margin-bottom: 3px;
+}
+
+.aside-item p {
+font-size: 11.5px;
+line-height: 1.5;
+color: var(–muted);
+font-weight: 300;
+}
+
+/* ── QUOTE BLOCK ── */
+.pull-quote {
+background: var(–paper-dark);
+border-top: 2px solid var(–rule);
+border-bottom: 2px solid var(–rule);
+padding: 12px 14px;
+margin: 12px 0;
+text-align: center;
+}
+
+.pull-quote blockquote {
+font-family: ‘Playfair Display’, serif;
+font-style: italic;
+font-size: 14px;
+line-height: 1.5;
+color: var(–ink);
+}
+
+.pull-quote cite {
+display: block;
+margin-top: 5px;
+font-size: 10px;
+letter-spacing: 0.12em;
+text-transform: uppercase;
+color: var(–muted);
+font-style: normal;
+font-family: ‘Source Serif 4’, serif;
+}
+
+/* ── FOOTER ── */
+.footer {
+border-top: 3px double var(–rule);
+padding: 10px 28px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+font-size: 9px;
+letter-spacing: 0.12em;
+text-transform: uppercase;
+color: var(–muted);
+font-family: ‘Source Serif 4’, serif;
+background: var(–paper-dark);
+}
+
+/* ── LOADING STATE ── */
+.loading-overlay {
+display: none;
+position: fixed;
+inset: 0;
+background: rgba(26,16,8,0.85);
+z-index: 100;
+align-items: center;
+justify-content: center;
+flex-direction: column;
+gap: 16px;
+}
+
+.loading-overlay.active { display: flex; }
+
+.loading-text {
+font-family: ‘Playfair Display’, serif;
+font-size: 24px;
+color: var(–paper);
+font-style: italic;
+}
+
+.loading-sub {
+font-family: ‘Source Serif 4’, serif;
+font-size: 11px;
+letter-spacing: 0.2em;
+text-transform: uppercase;
+color: rgba(245,240,232,0.5);
+}
+
+.spinner {
+width: 32px;
+height: 32px;
+border: 2px solid rgba(245,240,232,0.2);
+border-top-color: var(–paper);
+border-radius: 50%;
+animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── REGENERATE BUTTON ── */
+.regen-btn {
+position: fixed;
+bottom: 28px;
+right: 28px;
+background: var(–ink);
+color: var(–paper);
+border: none;
+padding: 12px 20px;
+font-family: ‘Source Serif 4’, serif;
+font-size: 11px;
+letter-spacing: 0.15em;
+text-transform: uppercase;
+cursor: pointer;
+box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+transition: background 0.2s;
+z-index: 50;
+}
+
+.regen-btn:hover { background: var(–accent); }
+
+@media (max-width: 700px) {
+.columns { grid-template-columns: 1fr; }
+.lead-story { grid-template-columns: 1fr; }
+.col:not(:last-child)::after { display: none; }
+.col { border-bottom: 1px solid rgba(42,31,14,0.2); }
+}
+</style>
+
+</head>
+<body>
+
+<div class="loading-overlay" id="loading">
+  <div class="spinner"></div>
+  <div class="loading-text">Setting the type…</div>
+  <div class="loading-sub">Gathering yesterday's facts</div>
+</div>
+
+<div class="page" id="paper">
+
+  <!-- MASTHEAD -->
+
+  <div class="masthead">
+    <div class="masthead-top">
+      <div class="masthead-meta">
+        <span id="edition-date">Sunday, April 20, 2025</span>
+        <span>·</span>
+        <span>Morning Edition</span>
+        <span>·</span>
+        <span>Vol. I, No. 1</span>
+      </div>
+      <div><span class="ai-badge">AI · Fact-Only Edition</span></div>
+      <div class="masthead-meta">
+        <span>Free of Opinion</span>
+        <span>·</span>
+        <span>Free of Spin</span>
+      </div>
+    </div>
+    <div class="paper-name">
+      <h1>The Morning Brief</h1>
+      <div class="subtitle">Facts Only &mdash; Yesterday's News &mdash; No Opinion &mdash; No Spin</div>
+    </div>
+  </div>
+
+  <!-- EDITION BAR -->
+
+  <div class="edition-bar">
+    <span>World &bull; Science &bull; Technology &bull; Business &bull; Health</span>
+    <span id="gen-time">Generated at 5:00 AM</span>
+    <span>Powered by Claude &bull; NewsAPI</span>
+  </div>
+
+  <!-- LEAD STORY -->
+
+  <div class="lead-story">
+    <div id="lead-main">
+      <div class="article-label">Top Story · World</div>
+      <h2 class="lead-headline" id="lead-headline">Loading today's lead story…</h2>
+      <div class="lead-subhead" id="lead-subhead">AI is gathering the latest verified facts from multiple sources.</div>
+      <p id="lead-body">Please wait while the morning edition is assembled. Stories are sourced from major news outlets and summarized without bias or opinion. Only verifiable facts are included.</p>
+    </div>
+    <div class="lead-aside">
+      <div class="aside-label">Also This Morning</div>
+      <div id="aside-items">
+        <div class="aside-item"><h3>Loading…</h3><p>Fetching stories</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION LABEL -->
+
+  <div class="section-label"><span>Top Stories</span></div>
+
+  <!-- THREE COLUMNS -->
+
+  <div class="columns">
+    <div class="col" id="col-1">
+      <div class="article">
+        <div class="article-label">Loading</div>
+        <h2>Fetching news…</h2>
+        <p>Stories are being gathered from verified sources and summarized for factual accuracy.</p>
+      </div>
+    </div>
+    <div class="col" id="col-2">
+      <div class="article">
+        <div class="article-label">Loading</div>
+        <h2>Fetching news…</h2>
+        <p>AI is summarizing yesterday's key events without political framing.</p>
+      </div>
+    </div>
+    <div class="col" id="col-3">
+      <div class="article">
+        <div class="article-label">Loading</div>
+        <h2>Fetching news…</h2>
+        <p>Facts only. No editorials. No spin.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+
+  <div class="footer">
+    <span>The Morning Brief</span>
+    <span>All content AI-generated from verified news sources · No opinion · No political bias</span>
+    <span id="footer-date">April 2025</span>
+  </div>
+
+</div>
+
+<button class="regen-btn" onclick="generatePaper()">↻ Regenerate Edition</button>
+
+<script>
+const ANTHROPIC_API = "https://api.anthropic.com/v1/messages";
+
+// Set today's date
+function setDates() {
+  const now = new Date();
+  const opts = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
+  document.getElementById('edition-date').textContent = now.toLocaleDateString('en-US', opts);
+  document.getElementById('gen-time').textContent = `Generated at ${now.toLocaleTimeString('en-US', {hour:'2-digit',minute:'2-digit'})}`;
+  document.getElementById('footer-date').textContent = now.toLocaleDateString('en-US', {month:'long', year:'numeric'});
+}
+
+async function generatePaper() {
+  setDates();
+  document.getElementById('loading').classList.add('active');
+
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  const dateStr = yesterday.toISOString().split('T')[0];
+
+  const prompt = `You are a completely neutral, facts-only news summarizer for a newspaper called "The Morning Brief". 
+Your job: summarize the most important real news events from ${dateStr}.
+
+Rules you MUST follow:
+- Report ONLY verifiable facts: who, what, when, where, how much
+- NO opinion, editorial, or analysis
+- NO politically loaded language or framing favoring any side
+- NO adjectives that imply judgment (e.g. "controversial", "shocking", "alarming")
+- If a topic is politically charged, state only the factual actions taken, not reactions or opinions
+- Aim for the tone of a wire service (AP, Reuters style)
+
+Return a JSON object ONLY (no markdown, no backticks) with this structure:
+{
+  "lead": {
+    "label": "category (e.g. World, Technology)",
+    "headline": "headline text",
+    "subhead": "one sentence factual context",
+    "body": "2-3 sentence factual summary"
+  },
+  "aside": [
+    {"headline": "short headline", "summary": "one sentence"},
+    {"headline": "short headline", "summary": "one sentence"},
+    {"headline": "short headline", "summary": "one sentence"}
+  ],
+  "col1": [
+    {"label": "category", "headline": "headline", "body": "2-3 sentence factual summary", "source": "source name"},
+    {"label": "category", "headline": "headline", "body": "2-3 sentence factual summary", "source": "source name"}
+  ],
+  "col2": [
+    {"label": "category", "headline": "headline", "body": "2-3 sentence factual summary", "source": "source name"},
+    {"label": "category", "headline": "headline", "body": "2-3 sentence factual summary", "source": "source name"}
+  ],
+  "col3": [
+    {"label": "category", "headline": "headline", "body": "2-3 sentence factual summary", "source": "source name"},
+    {"label": "category", "headline": "headline", "body": "2-3 sentence factual summary", "source": "source name"}
+  ]
+}`;
+
+  try {
+    const res = await fetch(ANTHROPIC_API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1000,
+        tools: [{ type: "web_search_20250305", name: "web_search" }],
+        messages: [{ role: "user", content: prompt }]
+      })
+    });
+
+    const data = await res.json();
+    const text = data.content.filter(b => b.type === "text").map(b => b.text).join("");
+    const clean = text.replace(/```json|```/g, "").trim();
+    const news = JSON.parse(clean);
+
+    // Populate lead
+    document.getElementById('lead-headline').textContent = news.lead.headline;
+    document.getElementById('lead-subhead').textContent = news.lead.subhead;
+    document.getElementById('lead-body').textContent = news.lead.body;
+    document.querySelector('.lead-story .article-label').textContent = `Top Story · ${news.lead.label}`;
+
+    // Populate aside
+    document.getElementById('aside-items').innerHTML = news.aside.map(a => `
+      <div class="aside-item">
+        <h3>${a.headline}</h3>
+        <p>${a.summary}</p>
+      </div>
+    `).join('');
+
+    // Populate columns
+    ['col1','col2','col3'].forEach((col, i) => {
+      const colEl = document.getElementById(`col-${i+1}`);
+      colEl.innerHTML = news[col].map(a => `
+        <div class="article">
+          <div class="article-label">${a.label}</div>
+          <h2>${a.headline}</h2>
+          <p>${a.body}</p>
+          <span class="source-tag">Source: ${a.source}</span>
+        </div>
+      `).join('');
+    });
+
+  } catch (err) {
+    console.error(err);
+    document.getElementById('lead-headline').textContent = "Could not load news — check API key configuration.";
+    document.getElementById('lead-body').textContent = "To use this page, add your Anthropic API key to the fetch headers in the script. See the setup guide.";
+  }
+
+  document.getElementById('loading').classList.remove('active');
+}
+
+generatePaper();
+</script>
+
+</body>
+</html>
