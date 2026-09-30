@@ -1,1 +1,36 @@
+name: Generate Morning Brief
+
+on:
+  schedule:
+    - cron: '0 5 * * *'   # 5:00 AM UTC every day
+  workflow_dispatch:        # Also allows manual trigger from GitHub UI
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Generate today's edition
+        env:
+          ANTHROPIC_KEY: ${{ secrets.ANTHROPIC_KEY }}
+          NEWSAPI_KEY: ${{ secrets.NEWSAPI_KEY }}
+        run: node generate.js
+
+      - name: Commit and push new edition
+        run: |
+          git config user.name "Morning Brief Bot"
+          git config user.email "bot@morning-brief"
+          git add index.html
+          git diff --staged --quiet || git commit -m "📰 Morning edition $(date +'%Y-%m-%d')"
+          git push
 
